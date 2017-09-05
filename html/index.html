@@ -5,21 +5,46 @@
       <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
       <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
       <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <style>
+            *{ font-family: Helvetica}
+
+            table{
+                  border-collapse: collapse; 
+                  margin:auto;
+            }
+            thead{
+                  background: grey;
+                  color:#fff;
+
+            }
+
+            td{
+                  padding:0.5em 1em;
+                  border: 1px solid black;
+            }
+      </style>
 </head>
 
 <body>
       <div id="root"></div>
 
-      <script type="text/babel">
-            var data = null;
+      <script type="text/babel">            
             axios.get('/temp.json')
-                  .then(function (result) {
-                        console.log(result.data)                        
-                        return Promise.resolve(data)
-                  })
-                  .then(function () {
+                  .then(function (result) {                        
+                        let data= result.data                                                
                         ReactDOM.render(
-                              <h1>Hello, world!</h1>,
+                              <table>
+                                    <thead>
+                                          <tr>
+                                          {Object.keys(data[0]).map((i)=><td>{i}</td>)}
+                                          </tr>
+                                    </thead>
+                                    <tbody>
+                                          {data.map((row, key)=><tr key={key}>
+                                                {Object.keys(row).map((field,keyfield)=><td key={field}>{row[field]}</td>)}                                                
+                                          </tr>)}
+                                    </tbody>
+                              </table>,
                               document.getElementById('root')
                         );
                   })
